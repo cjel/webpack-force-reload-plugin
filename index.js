@@ -17,9 +17,9 @@ class WebpackForceReload {
         _.forEach(matches, function(value) {
           var resolvedFile = path.resolve(value);
           that.resolvedFiles.push(resolvedFile);
-        }
-      );
-    });
+        });
+      }
+    );
   }
   apply (compiler) {
     compiler.hooks.compilation.tap('WebpackForceReload', (compilation) => {
@@ -34,9 +34,10 @@ class WebpackForceReload {
               }
             });
           }
-          if (this.globalDevServer && forceReload) {
-            this.globalDevServer.sendMessage(
-              this.globalDevServer.webSocketServer.clients,
+          let devServer = this.options.devServer();
+          if (devServer && forceReload) {
+            devServer.sendMessage(
+              devServer.webSocketServer.clients,
               "static-changed"
             );
           }
